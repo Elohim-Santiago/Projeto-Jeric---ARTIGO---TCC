@@ -1,0 +1,21 @@
+#FROM ubuntu:latest
+
+#RUN apt update && apt install -y python3 python3-pip python3-venv
+
+#WORKDIR /monitoramento_agua
+
+#COPY mac1.py /monitoramento_agua/
+
+#RUN python3 -m venv venv
+#RUN /monitoramento_agua/venv/bin/pip install --upgrade pip
+#RUN /monitoramento_agua/venv/bin/pip install requests mysql-connector->
+#CMD ["/monitoramento_agua/venv/bin/python", "/monitoramento_agua/mac1.>FROM python:3.11-slim
+
+WORKDIR /monitoramento_agua
+
+COPY mac1.py /monitoramento_agua/
+
+RUN pip install --upgrade pip
+RUN pip install requests mysql-connector-python matplotlib numpy
+
+CMD ["python", "mac1.py"]

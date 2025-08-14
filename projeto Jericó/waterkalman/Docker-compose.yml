@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mysqlsrv:
+    image: mysql:5.7
+    container_name: mysqlsrv
+    restart: always
+    env_file:
+      - arq.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./dados_mysql:/var/lib/mysql
+#      - ./init.sql:/docker-entrypoint-initdb/init.sql
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./init.sh:/init.sh
+    entrypoint: ["/init.sh"]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.c2
+    container_name: api-mac1
+    depends_on:
+      - mysqlsrv
+    env_file:
+      - arq.env
+    #command: python3 mac1.py
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
+  grafana_data:

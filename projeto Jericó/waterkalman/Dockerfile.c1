@@ -1,0 +1,22 @@
+FROM mysql:8.0
+
+# Evite alterar permissões da pasta de dados, isso pode causar erro
+# RUN chown -R mysql:root /var/lib/mysql/
+
+# Aceita argumentos durante o build (opcional)
+ARG MYSQL_DATABASE=monitoramento_agua
+ARG MYSQL_USER=root
+ARG MYSQL_PASSWORD=laica
+ARG MYSQL_ROOT_PASSWORD=laica
+
+# Essas variáveis são usadas automaticamente pelo MySQL no ENTRYPOINT
+ENV MYSQL_DATABASE=${MYSQL_DATABASE}
+ENV MYSQL_USER=${MYSQL_USER}
+ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
+ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+
+# ADD data.sql /docker-entrypoint-initdb.d/data.sql
+
+EXPOSE 3306
+
